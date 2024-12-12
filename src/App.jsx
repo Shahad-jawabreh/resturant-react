@@ -23,10 +23,6 @@ function App() {
             <Route path='/Pizza' element={<Pizza/>}/>
             <Route path='/Onion' element={<Onion/>}/>
             <Route path='/Salad' element={<Salad/>}/>
-
-
-
-
         </Routes>
     </BrowserRouter>
    

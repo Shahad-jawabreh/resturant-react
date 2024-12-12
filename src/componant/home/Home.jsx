@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Home() {
   const containerStyle = {
-    backgroundImage: `url(public/backgrounf.png)`,
+    backgroundImage: `url(/Pizza-3007395.jpg)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100vh',  // Full height of the viewport
@@ -14,10 +14,7 @@ export default function Home() {
 
   return (
     <div style={containerStyle}>
-      <div>
-        <h1>Welcome to our restaurant</h1>
-        {/* Add other content as needed */}
-      </div>
+      
     </div>
   );
 }
