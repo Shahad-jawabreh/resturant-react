@@ -10,51 +10,109 @@ const containerStyle = {
 
 const rowStyle = {
   display: 'flex',
-  justifyContent: 'space-around',
+  justifyContent: 'center',
   flexWrap: 'wrap',
+  gap: '20px',
   marginTop: '20px',
 };
 
 const recipeCardStyle = {
-  width: '30%',
-  backgroundColor: '#f8f9fa',
-  borderRadius: '10px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  width: '300px',
+  backgroundColor: '#ffffff',
+  borderRadius: '12px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   padding: '20px',
-  margin: '10px',
   textAlign: 'center',
+  transition: 'transform 0.3s ease-in-out',
 };
 
 const imageStyle = {
   width: '100%',
-  height: 'auto',
+  height: '250px', // تعيين ارتفاع ثابت للصور
+  objectFit: 'cover', // لتغطية الصورة بشكل جيد داخل المساحة المحددة
   borderRadius: '8px',
   marginTop: '10px',
+  transition: 'transform 0.3s ease-in-out',
+};
+
+const titleStyle = {
+  fontSize: '22px',
+  fontWeight: 'bold',
+  color: '#333', // تغيير اللون
+  margin: '10px 0',
+  textTransform: 'uppercase', // تحويل العنوان إلى أحرف كبيرة
+  letterSpacing: '1px', // إضافة مسافة بين الحروف
+};
+
+const buttonStyle = {
+  padding: '10px 15px',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '16px',
+  margin: '5px',
+  transition: 'background 0.3s ease-in-out',
+};
+
+const addToCartStyle = {
+  ...buttonStyle,
+  background: '#28a745',
+  color: '#fff',
+};
+
+const addToFavoritesStyle = {
+  ...buttonStyle,
+  background: '#ff4757',
+  color: '#fff',
 };
 
 export default function Onion() {
-  let [produc, setProduct] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
-  const getele = async () => {
+  const getRecipes = async () => {
     const response = await fetch(`https://forkify-api.herokuapp.com/api/search?q=onion`);
     const data1 = await response.json();
-    const data = data1.recipes;
-    setProduct(data);
+    setProducts(data1.recipes);
   };
 
   useEffect(() => {
-    getele();
+    getRecipes();
   }, []);
+
+  const addToCart = (recipe) => {
+    setCart([...cart, recipe]);
+    alert(`${recipe.title} added to cart!`);
+  };
+
+  const addToFavorites = (recipe) => {
+    setFavorites([...favorites, recipe]);
+    alert(`${recipe.title} added to favorites!`);
+  };
 
   return (
     <div style={containerStyle}>
-      <div className="row" style={rowStyle}>
-        {produc.map((ele) => (
-          <div className="col-md-4" key={ele.recipe_id} style={recipeCardStyle}>
-            <h2>{ele.title}</h2>
+      <h1>Onion Recipes 🍽️</h1>
+      <div style={rowStyle}>
+        {products.map((ele) => (
+          <div key={ele.recipe_id} style={recipeCardStyle}>
+            <h2 style={titleStyle}>{ele.title}</h2>
             <span>Publisher: {ele.publisher}</span>
-            <img src={ele.image_url} alt={ele.title} style={imageStyle} />
-            <p>Rate: {ele.social_rank}</p>
+            <img
+              src={ele.image_url}
+              alt={ele.title}
+              style={imageStyle}
+              onMouseOver={(e) => (e.target.style.transform = 'scale(1.05)')}
+              onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}
+            />
+            <p>Rate: {ele.social_rank.toFixed(1)}</p>
+            <button style={addToCartStyle} onClick={() => addToCart(ele)}>
+              🛒 Add to Cart
+            </button>
+            <button style={addToFavoritesStyle} onClick={() => addToFavorites(ele)}>
+              ❤️ Favorite
+            </button>
           </div>
         ))}
       </div>
